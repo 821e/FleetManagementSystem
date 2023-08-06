@@ -1,0 +1,138 @@
+.gabanav {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #085078 0%, #85D8CE  51%, #085078  100%);
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    border: 0px;
+}
+.gabanav:hover{
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+.navbar-fixed-top.scrolled {
+    background: linear-gradient(90deg, #3ec9cc 0%, rgba(0, 109, 119, 0.6) 100%);
+    transition: all 0.3s ease;
+    border-bottom: 3px solid #006d77;
+    padding: 10px 20px; /* Increased side padding for more space */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: #ffffff;
+    transition: color 0.3s ease, transform 0.3s ease;
+    padding: 10px 15px; /* More padding for better touch targets */
+}
+
+.navbar-inverse .navbar-nav>li>a:focus,
+.navbar-inverse .navbar-nav>li>a:hover {
+    color: #ffffff;
+    background-color: rgba(255, 253, 253, 0.1);
+    border-radius: 10px;
+    transform: scale(1.05); /* Slight scale on hover */
+}
+
+@media (min-width: 768px) {
+    .navbar {
+        font-family: 'Arial', sans-serif;
+        border-radius: 30px;
+        transition: 0.5s;
+        background-image: linear-gradient(to right, #085078 0%, #85D8CE  51%, #085078  100%);
+        color: white;
+        box-shadow: 0 0 20px #eee;
+        display: block;
+
+    }
+    .navbar:hover{
+        background-position: right center;
+        color: #fff;
+        text-decoration: none;
+    }
+}
+.navbar-default .navbar-nav>li>a {
+    color: #fdfdfd;
+}
+.navbar-default:hover{
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+.jumbotron {
+    padding-top: 38px;
+    padding-bottom: 30px;
+    padding-left: 26px;
+    margin-bottom: 0px;
+    color: inherit;
+    background-color: #282931;
+}
+
+.jumbotron h2 {
+    color: indianred;
+}
+
+.jumbotron p {
+    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: 200;
+    color: #ffffff;
+    margin-left: 0px;
+}
+
+/* Slider */
+.slider {
+    width: 100%;
+    margin: 0px auto;
+    height: 100%;
+}
+
+.slick-slide {
+    margin: 0px 50px;
+}
+
+.slick-slide img {
+    width: 100%;
+}
+
+.slick-prev:before,
+.slick-next:before {
+    color: #282931;
+}
+
+.slick-slide {
+    transition: all ease-in-out .5s;
+    opacity: .2;
+}
+
+.slick-active {
+    opacity: .5;
+}
+
+.slick-current {
+    opacity: 1;
+}
+h2{
+    background-image: linear-gradient(to right, #085078 0%, #85D8CE  51%, #085078  100%);
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+}
+h2:hover{
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+/* End Slider */
