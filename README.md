@@ -31,7 +31,7 @@ Fleet Management System is a comprehensive web application designed to streamlin
 ## Installation
 
 1. **Install XAMPP**
-   First, download and install XAMPP from the official website. Follow the installation instructions for your operating system.
+   First, download and install XAMPP from the [official website](https://www.apachefriends.org/index.html). Follow the installation instructions for your operating system.
 
 2. **Start Apache and MySQL**
    Once installed, open the XAMPP Control Panel and start both the Apache and MySQL services.
