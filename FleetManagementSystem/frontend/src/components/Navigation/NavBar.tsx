@@ -1,78 +1,97 @@
 import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
- 
+import styled from 'styled-components';
+import logo from '../../assets/logo.png'; 
 
+// Color Palette (Subtle Adjustments for a Softer Look)
+const colors = {
+  primary: '#CCD5AE',
+  background: '#E9EDC9',
+  highlight: '#FEFAE0',
+  secondary: '#FAEDCD',
+  accent: '#D4A373'
+};
 
-
+// Styling
 const NavBarContainer = styled.nav`
   width: 100%;
-  background-color: #2c3e50;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
+  background-color: ${colors.primary}; 
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed; // Make navbar fixed
+  top: 0;
+  z-index: 10; // Ensure it's above other content
 `;
 
-const NavItem = styled.a<{ active?: boolean }>`
-  float: left;
-  display: block;
-  color: ${({ active }) => (active ? '#4CAF50' : 'white')};
-  text-align: center;
-  padding: 16px 20px;
-  text-decoration: none;
-  font-size: 18px;
-  transition: all 0.3s ease-in-out;
+const NavLogo = styled.img`
+  max-height: 3rem;
+  width: auto;
+  margin-right: 2rem; // Add space to the right of the logo
+`;
 
-  ${({ active }) => active && `
-    border-bottom: 3px solid #4CAF50;
-  `}
+const NavLinks = styled.div<{ isOpen: boolean }>`
+  display: flex;
 
-  &:hover {
-    color: #4CAF50;
-    background-color: #ecf0f1;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    position: absolute;
+    top: 100%; 
+    right: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
+    width: 200px;
+    background-color: ${colors.primary};
+    padding: 1rem; 
+    transition: right 0.3s ease-in-out;
   }
 `;
 
-const HamburgerIcon = styled.div`
-  display: none;
-  float: right;
-  font-size: 30px;
-  cursor: pointer;
-  color: white;
+const NavItem = styled.a<{ active?: boolean }>`
+  color: white; 
+  text-decoration: none;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  margin: 0 0.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-weight: 500;
 
-  @media (max-width: 600px) {
+  &:hover {
+    background-color: ${colors.secondary}; 
+    color: ${colors.primary}; 
+  }
+
+  ${({ active }) => active && `
+    background-color: ${colors.secondary}; 
+    color: ${colors.primary}; 
+  `}
+`;
+
+const HamburgerIcon = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
     display: block;
   }
 `;
 
-const NavLinks = styled.div<{ isOpen: boolean }>`
-  @media (max-width: 600px) {
-    display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
-    width: 100%;
-    float: none;
+const LoginButton = styled.button`
+  background-color: ${colors.accent}; 
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 
-    ${NavItem} {
-      float: none;
-      text-align: left;
-      padding: 12px 16px;
-    }
+  &:hover {
+    background-color: darken(${colors.accent}, 10%); 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); // Add a hover shadow
   }
 `;
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const AnimatedNavItem = styled(NavItem)`
-  animation: ${fadeIn} 0.5s ease-in-out;
-`;
-
 const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeItem, setActiveItem] = useState<string>('Home');
@@ -88,13 +107,21 @@ const NavBar: React.FC = () => {
 
   return (
     <NavBarContainer>
+      <NavLogo src={logo} alt="Fleet Management Logo" /> 
       <HamburgerIcon onClick={toggleMenu}>&#9776;</HamburgerIcon>
       <NavLinks isOpen={isOpen}>
-        <AnimatedNavItem active={activeItem === 'Home'} onClick={() => handleNavItemClick('Home')}>Home</AnimatedNavItem>
-        <AnimatedNavItem active={activeItem === 'About'} onClick={() => handleNavItemClick('About')}>About</AnimatedNavItem>
-        <AnimatedNavItem active={activeItem === 'Services'} onClick={() => handleNavItemClick('Services')}>Services</AnimatedNavItem>
-        <AnimatedNavItem active={activeItem === 'Contact'} onClick={() => handleNavItemClick('Contact')}>Contact</AnimatedNavItem>
-        <AnimatedNavItem active={activeItem === 'Login'} onClick={() => handleNavItemClick('Login')} style={{ float: 'right' }}>Login</AnimatedNavItem>
+        <NavItem active={activeItem === 'Home'} onClick={() => handleNavItemClick('Home')}>Home</NavItem>
+        <NavItem active={activeItem === 'Bookings'} onClick={() => handleNavItemClick('Bookings')}>Bookings</NavItem>
+        <NavItem active={activeItem === 'Booking Form'} onClick={() => handleNavItemClick('Booking Form')}>Booking Form</NavItem>
+        <NavItem active={activeItem === 'Notifications'} onClick={() => handleNavItemClick('Notifications')}>Notifications</NavItem>
+        <NavItem active={activeItem === 'Trip History'} onClick={() => handleNavItemClick('Trip History')}>Trip History</NavItem>
+        <NavItem active={activeItem === 'Support and Help'} onClick={() => handleNavItemClick('Support and Help')}>Bookings</NavItem>
+        <NavItem active={activeItem === 'Support and Help'} onClick={() => handleNavItemClick('Support and Help')}>Bookings</NavItem>
+        <NavItem active={activeItem === 'Support and Help'} onClick={() => handleNavItemClick('Support and Help')}>Bookings</NavItem>
+
+
+
+        <LoginButton onClick={() => handleNavItemClick('Login')}>Login</LoginButton> 
       </NavLinks>
     </NavBarContainer>
   );
