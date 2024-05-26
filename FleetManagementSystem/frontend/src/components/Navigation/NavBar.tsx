@@ -116,8 +116,7 @@ const NavBar: React.FC = () => {
         <NavItem active={activeItem === 'Notifications'} onClick={() => handleNavItemClick('Notifications')}>Notifications</NavItem>
         <NavItem active={activeItem === 'Trip History'} onClick={() => handleNavItemClick('Trip History')}>Trip History</NavItem>
         <NavItem active={activeItem === 'Support and Help'} onClick={() => handleNavItemClick('Support and Help')}>Bookings</NavItem>
-        <NavItem active={activeItem === 'Support and Help'} onClick={() => handleNavItemClick('Support and Help')}>Bookings</NavItem>
-        <NavItem active={activeItem === 'Support and Help'} onClick={() => handleNavItemClick('Support and Help')}>Bookings</NavItem>
+        
 
 
 
