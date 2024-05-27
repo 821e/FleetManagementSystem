@@ -3,11 +3,11 @@ import styled, { keyframes } from 'styled-components';
 
 // --- Color Palette ---
 const colors = {
-    primary: '#CCD5AE',
-    background: '#E9EDC9',
-    highlight: '#FEFAE0',
-    secondary: '#FAEDCD',
-    accent: '#D4A373'
+    primary: '#009688',
+    background: '#FFFFFF',
+    highlight: '#FF5722',
+    secondary: '#2196F3',
+    accent: '#8BC34A'
 };
 
 // --- Keyframe Animations ---
