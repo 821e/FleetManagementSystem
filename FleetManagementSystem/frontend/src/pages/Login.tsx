@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import styled, { keyframes, ThemeProvider } from 'styled-components';
 
 // --- Color Palette ---
 const colors = {
   primary: '#355070',
-  backgroundLight: '#F8F9FA', // Main background
-  background: '#FFFFFF',      // Content background (adjusted to pure white)
+  backgroundLight: '#F8F9FA',
+  background: '#FFFFFF',
   highlight: '#6D597A',
   secondary: '#B56576',
   accent: '#EAAC8B',
@@ -34,7 +35,7 @@ const darken = (color: string, amount: number): string => {
   const num = parseInt(color.replace("#", ""), 16);
   const amt = Math.round(2.55 * amount);
   const R = (num >> 16) - amt;
-  const B = ((num >> 8) & 0x00FF) - amt; // Added parentheses for clarity
+  const B = ((num >> 8) & 0x00FF) - amt;
   const G = (num & 0x0000FF) - amt;
   return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1);
 };
@@ -51,19 +52,19 @@ const Container = styled.div`
 
 const Card = styled.div`
   background-color: ${props => props.theme.background};
-  padding: 50px; /* Increased padding for more breathing room */
-  border-radius: 25px; /* Slightly rounder corners */
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+  padding: 50px;
+  border-radius: 25px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   width: 450px;
   text-align: center;
-  animation: ${float} 4s ease-in-out infinite; /* Gentle floating animation */
+  animation: ${float} 4s ease-in-out infinite;
 `;
 
 const Title = styled.h1`
-  color: ${props => props.theme.primary}; /* Title color aligned with primary */
-  margin-bottom: 40px; /* Increased margin */
-  font-size: 2.5em;  /* Adjusted title size */
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
+  color: ${props => props.theme.primary};
+  margin-bottom: 40px;
+  font-size: 2.5em;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 `;
 
 const Input = styled.input`
@@ -88,15 +89,14 @@ const Button = styled.button`
   border-radius: 8px;
   cursor: pointer;
   font-size: 1em;
-  font-weight: bold; /* Add some weight to the text */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smoother hover transition */
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
-    transform: translateY(-2px); /* Lift up slightly on hover */
+    transform: translateY(-2px);
     background-color: ${props => darken(props.theme.accent, 10)};
   }
 
-  // --- Mask Animation ---
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -108,7 +108,7 @@ const Button = styled.button`
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, ${props => props.theme.primary} 0%, ${props => props.theme.secondary} 100%); /* Gradient mask */
+    background: linear-gradient(90deg, ${props => props.theme.primary} 0%, ${props => props.theme.secondary} 100%);
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
     z-index: -1;
@@ -120,8 +120,8 @@ const Button = styled.button`
   }
 `;
 
-const AdminCard = styled(Card)` /* Inherit styles from Card */
-  width: 500px; /* Wider for additional admin fields */
+const AdminCard = styled(Card)`
+  width: 500px;
 `;
 
 const RoleToggle = styled.button`
@@ -131,7 +131,7 @@ const RoleToggle = styled.button`
   text-decoration: underline;
   cursor: pointer;
   font-size: 0.9em;
-  margin-top: 10px; /* Adjust spacing as needed */
+  margin-top: 10px;
 `;
 
 const RoleToggleContainer = styled.div`
@@ -161,11 +161,39 @@ const RoleToggleContainer = styled.div`
 const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [adminCode, setAdminCode] = useState('');
   const [isAdminView, setIsAdminView] = useState(false);
 
-  const handleSubmit = (role: string) => {
-    // Handle login logic based on role
-    console.log("Submitted:", username, password, role);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleSubmit = (role: 'user' | 'admin') => {
+    const url = role === 'admin' ? '/auth/admin/login' : '/auth/login';
+    fetch(`http://localhost:8080${url}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            admin_code: role === 'admin' ? adminCode : undefined,
+            username: username,
+            password: password
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Login failed');
+    })
+    .then(data => {
+        // Handle successful login
+        console.log(data);
+        // Redirect to home page
+        navigate('/');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
   };
 
   return (
@@ -174,9 +202,24 @@ const App = () => {
         {isAdminView ? (
           <AdminCard>
             <Title>Admin Login</Title>
-            <Input type="text" placeholder="Admin Code" />
-            <Input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input 
+              type="text" 
+              placeholder="Admin Code" 
+              value={adminCode} 
+              onChange={(e) => setAdminCode(e.target.value)} 
+            />
+            <Input 
+              type="text" 
+              placeholder="Username" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+            />
+            <Input 
+              type="password" 
+              placeholder="Password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+            />
             <Button onClick={() => handleSubmit('admin')}>Login as Admin</Button>
             <RoleToggleContainer>  
               <RoleToggle onClick={() => setIsAdminView(false)}>Login as User</RoleToggle>
@@ -185,8 +228,18 @@ const App = () => {
         ) : (
           <Card>
             <Title>User Login</Title>
-            <Input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input 
+              type="text" 
+              placeholder="Username" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+            />
+            <Input 
+              type="password" 
+              placeholder="Password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+            />
             <Button onClick={() => handleSubmit('user')}>Login</Button>
             <RoleToggleContainer>
               <RoleToggle onClick={() => setIsAdminView(true)}>Login as Admin</RoleToggle> 
