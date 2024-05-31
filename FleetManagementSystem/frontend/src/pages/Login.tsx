@@ -1,16 +1,32 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import styled, { keyframes, ThemeProvider } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import styled, { keyframes, ThemeProvider, createGlobalStyle } from 'styled-components';
+import backSVG from '../assets/back.svg';
 
 // --- Color Palette ---
 const colors = {
-  primary: '#355070',
-  backgroundLight: '#F8F9FA',
-  background: '#FFFFFF',
-  highlight: '#6D597A',
-  secondary: '#B56576',
-  accent: '#EAAC8B',
+  primary: '#4D6A79',       // Dark blue from the truck
+  backgroundLight: '#F0F4F5', // Very light grey
+  background: '#E5E9EB',    // Slightly darker grey
+  highlight: '#7390A2',     // Medium blue
+  secondary: '#637B8C',     // Medium-dark blue
+  accent: '#A3B0B9',        // Light blue-grey
 };
+
+// --- Global Styles ---
+const GlobalStyle = createGlobalStyle`
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url(${backSVG});
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+`;
 
 // --- Keyframe Animations ---
 const float = keyframes`
@@ -30,7 +46,7 @@ const maskAnimation = keyframes`
   }
 `;
 
-// Function to create hover effect (with fixed operator precedence)
+// Function to create hover effect
 const darken = (color: string, amount: number): string => {
   const num = parseInt(color.replace("#", ""), 16);
   const amt = Math.round(2.55 * amount);
@@ -41,13 +57,12 @@ const darken = (color: string, amount: number): string => {
 };
 
 // --- Styled Components ---
-
 const Container = styled.div`
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at center, ${props => props.theme.backgroundLight} 50%, ${props => props.theme.primary});
+  background: rgba(255, 255, 255, 0.8); /* Slight white overlay for readability */
 `;
 
 const Card = styled.div`
@@ -164,7 +179,7 @@ const App = () => {
   const [adminCode, setAdminCode] = useState('');
   const [isAdminView, setIsAdminView] = useState(false);
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleSubmit = (role: 'user' | 'admin') => {
     const url = role === 'admin' ? '/auth/admin/login' : '/auth/login';
@@ -186,9 +201,7 @@ const App = () => {
         throw new Error('Login failed');
     })
     .then(data => {
-        // Handle successful login
         console.log(data);
-        // Redirect to home page
         navigate('/');
     })
     .catch(error => {
@@ -198,6 +211,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={colors}>
+      <GlobalStyle />
       <Container>
         {isAdminView ? (
           <AdminCard>
@@ -227,7 +241,7 @@ const App = () => {
           </AdminCard>
         ) : (
           <Card>
-            <Title>User Login</Title>
+            <Title>Fleet Management System</Title>
             <Input 
               type="text" 
               placeholder="Username" 
@@ -242,7 +256,7 @@ const App = () => {
             />
             <Button onClick={() => handleSubmit('user')}>Login</Button>
             <RoleToggleContainer>
-              <RoleToggle onClick={() => setIsAdminView(true)}>Login as Admin</RoleToggle> 
+              <RoleToggle onClick={() => setIsAdminView(true)}>Login as Admin</RoleToggle>
             </RoleToggleContainer>
           </Card>
         )}

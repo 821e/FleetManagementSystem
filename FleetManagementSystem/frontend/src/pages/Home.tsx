@@ -1,27 +1,27 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
-// Define your color palette
+// --- Color Palette ---
 const colors = {
-  primary: '#355070',
-  backgroundLight: '#F8F9FA', // Main background
-  background: '#F2F4F5',        // Content background
-  highlight: '#6D597A',
-  secondary: '#B56576',
-  accent: '#EAAC8B',
+  primary: '#4D6A79',       // Dark blue from the truck
+  backgroundLight: '#F0F4F5', // Very light grey
+  background: '#E5E9EB',    // Slightly darker grey
+  highlight: '#7390A2',     // Medium blue
+  secondary: '#637B8C',     // Medium-dark blue
+  accent: '#A3B0B9',        // Light blue-grey
 };
 
-// Function to create hover effect (with fixed operator precedence)
+// Function to create hover effect
 const darken = (color: string, amount: number): string => {
   const num = parseInt(color.replace("#", ""), 16);
   const amt = Math.round(2.55 * amount);
   const R = (num >> 16) - amt;
-  const B = ((num >> 8) & 0x00FF) - amt; // Added parentheses for clarity
+  const B = ((num >> 8) & 0x00FF) - amt;
   const G = (num & 0x0000FF) - amt;
   return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1);
 };
 
-// Styled Components
+// --- Styled Components ---
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -30,11 +30,11 @@ const Container = styled.div`
   min-height: 100vh;
   padding: 20px;
   text-align: center;
-  background-color: ${props => props.theme.backgroundLight}; // Main background color
+  background-color: rgba(255, 255, 255, 0.8); // Slight white overlay for readability
 `;
 
 const ContentArea = styled.div`
-  background-color: ${props => props.theme.background}; // Content background color
+  background-color: ${props => props.theme.background};
   padding: 30px;
   border-radius: 8px;
 `;
@@ -61,7 +61,7 @@ const Button = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: ${props => darken(props.theme.highlight, 10)}; 
+    background-color: ${props => darken(props.theme.highlight, 10)};
   }
 `;
 

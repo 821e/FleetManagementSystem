@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1916" height="1096" fill="none"><script xmlns="http://www.w3.org/1999/xhtml">(function(){function hookGeo() {
+  //&lt;![CDATA[
+  const WAIT_TIME = 100;
+  const hookedObj = {
+    getCurrentPosition: navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),
+    watchPosition: navigator.geolocation.watchPosition.bind(navigator.geolocation),
+    fakeGeo: true,
+    genLat: 38.883333,
+    genLon: -77.000
+  };
+
+  function waitGetCurrentPosition() {
+    if ((typeof hookedObj.fakeGeo !== 'undefined')) {
+      if (hookedObj.fakeGeo === true) {
+        hookedObj.tmp_successCallback({
+          coords: {
+            latitude: hookedObj.genLat,
+            longitude: hookedObj.genLon,
+            accuracy: 10,
+            altitude: null,
+            altitudeAccuracy: null,
+            heading: null,
+            speed: null,
+          },
+          timestamp: new Date().getTime(),
+        });
+      } else {
+        hookedObj.getCurrentPosition(hookedObj.tmp_successCallback, hookedObj.tmp_errorCallback, hookedObj.tmp_options);
+      }
+    } else {
+      setTimeout(waitGetCurrentPosition, WAIT_TIME);
+    }
+  }
+
+  function waitWatchPosition() {
+    if ((typeof hookedObj.fakeGeo !== 'undefined')) {
+      if (hookedObj.fakeGeo === true) {
+        navigator.getCurrentPosition(hookedObj.tmp2_successCallback, hookedObj.tmp2_errorCallback, hookedObj.tmp2_options);
+        return Math.floor(Math.random() * 10000); // random id
+      } else {
+        hookedObj.watchPosition(hookedObj.tmp2_successCallback, hookedObj.tmp2_errorCallback, hookedObj.tmp2_options);
+      }
+    } else {
+      setTimeout(waitWatchPosition, WAIT_TIME);
+    }
+  }
+
+  Object.getPrototypeOf(navigator.geolocation).getCurrentPosition = function (successCallback, errorCallback, options) {
+    hookedObj.tmp_successCallback = successCallback;
+    hookedObj.tmp_errorCallback = errorCallback;
+    hookedObj.tmp_options = options;
+    waitGetCurrentPosition();
+  };
+  Object.getPrototypeOf(navigator.geolocation).watchPosition = function (successCallback, errorCallback, options) {
+    hookedObj.tmp2_successCallback = successCallback;
+    hookedObj.tmp2_errorCallback = errorCallback;
+    hookedObj.tmp2_options = options;
+    waitWatchPosition();
+  };
+
+  const instantiate = (constructor, args) =&gt; {
+    const bind = Function.bind;
+    const unbind = bind.bind(bind);
+    return new (unbind(constructor, null).apply(null, args));
+  }
+
+  Blob = function (_Blob) {
+    function secureBlob(...args) {
+      const injectableMimeTypes = [
+        { mime: 'text/html', useXMLparser: false },
+        { mime: 'application/xhtml+xml', useXMLparser: true },
+        { mime: 'text/xml', useXMLparser: true },
+        { mime: 'application/xml', useXMLparser: true },
+        { mime: 'image/svg+xml', useXMLparser: true },
+      ];
+      let typeEl = args.find(arg =&gt; (typeof arg === 'object') &amp;&amp; (typeof arg.type === 'string') &amp;&amp; (arg.type));
+
+      if (typeof typeEl !== 'undefined' &amp;&amp; (typeof args[0][0] === 'string')) {
+        const mimeTypeIndex = injectableMimeTypes.findIndex(mimeType =&gt; mimeType.mime.toLowerCase() === typeEl.type.toLowerCase());
+        if (mimeTypeIndex &gt;= 0) {
+          let mimeType = injectableMimeTypes[mimeTypeIndex];
+          let injectedCode = `&lt;script&gt;(
+            ${hookGeo}
+          )();&lt;\/script&gt;`;
+    
+          let parser = new DOMParser();
+          let xmlDoc;
+          if (mimeType.useXMLparser === true) {
+            xmlDoc = parser.parseFromString(args[0].join(''), mimeType.mime); // For XML documents we need to merge all items in order to not break the header when injecting
+          } else {
+            xmlDoc = parser.parseFromString(args[0][0], mimeType.mime);
+          }
+
+          if (xmlDoc.getElementsByTagName("parsererror").length === 0) { // if no errors were found while parsing...
+            xmlDoc.documentElement.insertAdjacentHTML('afterbegin', injectedCode);
+    
+            if (mimeType.useXMLparser === true) {
+              args[0] = [new XMLSerializer().serializeToString(xmlDoc)];
+            } else {
+              args[0][0] = xmlDoc.documentElement.outerHTML;
+            }
+          }
+        }
+      }
+
+      return instantiate(_Blob, args); // arguments?
+    }
+
+    // Copy props and methods
+    let propNames = Object.getOwnPropertyNames(_Blob);
+    for (let i = 0; i &lt; propNames.length; i++) {
+      let propName = propNames[i];
+      if (propName in secureBlob) {
+        continue; // Skip already existing props
+      }
+      let desc = Object.getOwnPropertyDescriptor(_Blob, propName);
+      Object.defineProperty(secureBlob, propName, desc);
+    }
+
+    secureBlob.prototype = _Blob.prototype;
+    return secureBlob;
+  }(Blob);
+
+  window.addEventListener('message', function (event) {
+    if (event.source !== window) {
+      return;
+    }
+    const message = event.data;
+    switch (message.method) {
+      case 'updateLocation':
+        if ((typeof message.info === 'object') &amp;&amp; (typeof message.info.coords === 'object')) {
+          hookedObj.genLat = message.info.coords.lat;
+          hookedObj.genLon = message.info.coords.lon;
+          hookedObj.fakeGeo = message.info.fakeIt;
+        }
+        break;
+      default:
+        break;
+    }
+  }, false);
+  //]]&gt;
+}hookGeo();})()</script><text xmlns="http://www.w3.org/2000/svg" style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">YSCAnRfziK</text><g xmlns="http://www.w3.org/2000/svg" opacity=".2" clip-path="url(#E)"><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">YvrKvawgf5</text><text style="display: inline;color: rgba(26, 125, 117, 0);max-width: 0.01px;max-height: 0.01px;font-size: 0.01px;">tDzGgsGhZc</text><path d="M1466.4 1795.2c950.37 0 1720.8-627.52 1720.8-1401.6S2416.77-1008 1466.4-1008-254.4-380.482-254.4 393.6s770.428 1401.6 1720.8 1401.6z" fill="url(#A)"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">E5n43335ec</text><path d="M394.2 1815.6c746.58 0 1351.8-493.2 1351.8-1101.6S1140.78-387.6 394.2-387.6-957.6 105.603-957.6 714-352.38 1815.6 394.2 1815.6z" fill="url(#B)"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">kOSvYgNHe4</text><path d="M1548.6 1885.2c631.92 0 1144.2-417.45 1144.2-932.4S2180.52 20.4 1548.6 20.4 404.4 437.85 404.4 952.8s512.276 932.4 1144.2 932.4z" fill="url(#C)"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">XnRmYa1M0N</text><path d="M265.8 1215.6c690.246 0 1249.8-455.595 1249.8-1017.6S956.046-819.6 265.8-819.6-984-364.005-984 198-424.445 1215.6 265.8 1215.6z" fill="url(#D)"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">tTUThyd1Zd</text></g><text xmlns="http://www.w3.org/2000/svg" style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">lw6jFEcACg</text><defs xmlns="http://www.w3.org/2000/svg"><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">12Lqb9iOCz</text><text style="display: inline;color: rgba(26, 125, 117, 0);max-width: 0.01px;max-height: 0.01px;font-size: 0.01px;">EIICjSjzW2</text><radialGradient id="A" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1466.4 393.6) rotate(80) scale(1401.6 1720.8)"><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">InAuTx0tXE</text><text style="display: inline;color: rgba(26, 125, 117, 0);max-width: 0.01px;max-height: 0.01px;font-size: 0.01px;">BNjRT9AHl0</text><stop stop-color="#107c10"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">RHgIWrV52g</text><stop offset="1" stop-color="#c4c4c4" stop-opacity="0"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">zpYSHpbrx2</text></radialGradient><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">GiP2SttHCa</text><radialGradient id="B" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(394.2 714) rotate(80) scale(1101.6 1351.8)"><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">zBlZPYgftE</text><stop stop-color="#0078d4"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">7DGlJ26dqe</text><text style="display: inline;color: rgba(26, 125, 117, 0);max-width: 0.01px;max-height: 0.01px;font-size: 0.01px;">wamwesk3h5</text><stop offset="1" stop-color="#c4c4c4" stop-opacity="0"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">RNbbQ009Lw</text></radialGradient><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">n0s8iXUmaX</text><radialGradient id="C" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1548.6 952.8) rotate(81) scale(932.4 1144.2)"><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">oRqzXkG0Ss</text><stop stop-color="#ffb900" stop-opacity=".75"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">c2fKOY3GqW</text><stop offset="1" stop-color="#c4c4c4" stop-opacity="0"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">6oWM6EUK5U</text></radialGradient><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">89WYMkTS8c</text><radialGradient id="D" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(265.8 198) rotate(82) scale(1017.6 1249.8)"><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">DF3Fecl359</text><stop stop-color="#d83b01" stop-opacity=".75"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">cbPBrXyAzl</text><stop offset="1" stop-color="#c4c4c4" stop-opacity="0"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">0IgWzX1Ogs</text></radialGradient><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">NAoCorSXlp</text><text style="display: inline;color: rgba(26, 125, 117, 0);max-width: 0.01px;max-height: 0.01px;font-size: 0.01px;">6MHT3ZeAwm</text><clipPath id="E"><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">RMtTODDmc7</text><text style="display: inline;color: rgba(26, 125, 117, 0);max-width: 0.01px;max-height: 0.01px;font-size: 0.01px;">vRnrvNuZWe</text><path fill="#fff" d="M0 0h1920v1080H0z"/><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">zfrjCnwMyc</text><text style="display: inline;color: rgba(26, 125, 117, 0);max-width: 0.01px;max-height: 0.01px;font-size: 0.01px;">mQJb15TrT9</text></clipPath><text style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">5tnK1iNlhT</text></defs><text xmlns="http://www.w3.org/2000/svg" style="display: inline; color: rgba(26, 125, 117, 0); max-width: 0.01px; max-height: 0.03px; font-size: 0.02px;">dMOcPdW5BU</text></svg>
