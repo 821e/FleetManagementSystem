@@ -1,0 +1,23 @@
+.dashboard {
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.sidebar-open {
+  margin-left: 250px;
+}
+
+.toggle-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}

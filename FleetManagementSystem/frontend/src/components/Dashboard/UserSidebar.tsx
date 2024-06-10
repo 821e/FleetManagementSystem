@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  Box, Icon, Link, Text, VStack, Button, useDisclosure, Drawer, DrawerOverlay,
+  Box, Icon, Link, Text, VStack, Button, Drawer, DrawerOverlay,
   DrawerContent, DrawerHeader, DrawerBody, useBreakpointValue
 } from '@chakra-ui/react';
-import { FaHome, FaCar, FaCalendar, FaChartBar, FaUser, FaBoxes, FaBars } from 'react-icons/fa';
+import { FaHome, FaCalendar, FaChartBar, FaUser, FaBars } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 
@@ -14,12 +14,10 @@ const colors = {
 };
 
 const menuItems = [
-  { label: 'Dashboard', icon: FaHome, to: '/admin-dashboard' },
-  { label: 'Orders', icon: FaBoxes, to: '/admin-dashboard/orders' },
-  { label: 'Statistics', icon: FaChartBar, to: '/admin-dashboard/statistics' },
-  { label: 'Products', icon: FaCar, to: '/admin-dashboard/products' },
-  { label: 'Stock', icon: FaCalendar, to: '/admin-dashboard/stock' },
-  { label: 'Offers', icon: FaUser, to: '/admin-dashboard/offers' },
+  { label: 'Dashboard', icon: FaHome, to: '/dashboard/user-dashboard' },
+  { label: 'Events', icon: FaCalendar, to: '/dashboard/user-dashboard/events' },
+  { label: 'Statistics', icon: FaChartBar, to: '/dashboard/user-dashboard/statistics' },
+  { label: 'Profile', icon: FaUser, to: '/dashboard/user-dashboard/profile' },
 ];
 
 const SidebarContainer = styled(Box)<{ isOpen: boolean }>`
@@ -60,7 +58,7 @@ const SidebarToggleButton = styled(Button)`
   }
 `;
 
-const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: () => void }) => {
+const UserSidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: () => void }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   return (
@@ -72,7 +70,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
             {isOpen && "Menu"}
           </SidebarToggleButton>
           {isOpen && (
-            <Text fontSize="2xl" color={colors.background} pl={5} pb={5}>eProduct</Text>
+            <Text fontSize="2xl" color={colors.background} pl={5} pb={5}>Opreation Dashboard</Text>
           )}
           {menuItems.map((item, index) => (
             <SidebarItem
@@ -132,4 +130,4 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
   );
 };
 
-export default Sidebar;
+export default UserSidebar;
