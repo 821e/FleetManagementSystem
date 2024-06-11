@@ -7,7 +7,7 @@ import { AuthContext } from '../App'; // Adjust the import as necessary
 // --- Color Palette ---
 const colors = {
   primary: '#000000',      // Black
-  background: '#FFFFFF',   // White
+  background: '#FFFFFF',   // White 
   accent: '#DC143C',       // Crimson Red
 };
 
