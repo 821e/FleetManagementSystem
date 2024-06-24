@@ -5,6 +5,7 @@
 .content {
   flex: 1;
   padding: 20px;
+  transition: margin-left 0.3s ease;
 }
 
 .sidebar-open {
@@ -20,4 +21,11 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
+}
+
+.dashboard-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }

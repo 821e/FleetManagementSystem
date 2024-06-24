@@ -3,20 +3,22 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import AdminDashboard from './components/Dashboard/AdminDashboard';
 import UserDashboard from './components/Dashboard/UserDashboard';
 import Login from './pages/Login';
+import AdminVehicleManager from './components/Vehicle/AdminVehicleManager';
+import UserVehicleViewer from './components/Vehicle/UserVehicleViewer';
 
 interface AuthContextType {
   auth: { isLoggedIn: boolean; role: string };
   setAuth: React.Dispatch<React.SetStateAction<{ isLoggedIn: boolean; role: string }>>;
 }
 
-// Create a context for authentication
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 const App = () => {
   const [auth, setAuth] = useState({ isLoggedIn: false, role: '' });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
-    // Implement your toggle sidebar logic here
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
@@ -25,18 +27,34 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route
-            path="/dashboard/admin-dashboard"
+            path="/admin/dashboard"
             element={
               <ProtectedRoute role="admin">
-                <AdminDashboard isSidebarOpen={true} toggleSidebar={toggleSidebar} />
+                <AdminDashboard isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/dashboard/user-dashboard"
+            path="/user/dashboard"
             element={
               <ProtectedRoute role="user">
-                <UserDashboard isSidebarOpen={true} toggleSidebar={toggleSidebar} />
+                <UserDashboard isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/vehicle-management"
+            element={
+              <ProtectedRoute role="admin">
+                <AdminVehicleManager />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user/vehicle-info"
+            element={
+              <ProtectedRoute role="user">
+                <UserVehicleViewer />
               </ProtectedRoute>
             }
           />
@@ -47,7 +65,6 @@ const App = () => {
   );
 };
 
-// Protected route component
 interface ProtectedRouteProps {
   role: string;
   children: ReactNode;
@@ -69,5 +86,4 @@ const ProtectedRoute = ({ role, children }: ProtectedRouteProps) => {
   return <>{children}</>;
 };
 
-export { AuthContext };
 export default App;

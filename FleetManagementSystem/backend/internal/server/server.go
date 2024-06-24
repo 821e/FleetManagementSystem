@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"FMSBackend/internal/auth"
@@ -12,13 +12,12 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func Init() {
+func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
 
-	// Check database connection
 	database.CheckDBConnection()
 
 	db := database.InitDB()
@@ -26,7 +25,6 @@ func Init() {
 
 	router := gin.Default()
 
-	// Configure CORS
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"}, // Replace with your frontend URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},

@@ -2,13 +2,13 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { ChakraProvider, Box, Tabs, TabList, Tab, TabPanels, TabPanel, Button, Input, Heading, VStack, Text } from '@chakra-ui/react';
-import { AuthContext } from '../App'; // Adjust the import as necessary
+import { AuthContext } from '../App';
 
 // --- Color Palette ---
 const colors = {
-  primary: '#000000',      // Black
-  background: '#FFFFFF',   // White 
-  accent: '#DC143C',       // Crimson Red
+  primary: '#000000',
+  background: '#FFFFFF',
+  accent: '#DC143C',
 };
 
 // --- Global Styles ---
@@ -20,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     background: ${colors.background};
     color: ${colors.primary};
-    font-family: 'Roboto', sans-serif; // Using Roboto as the primary font
+    font-family: 'Roboto', sans-serif;
   }
 `;
 
@@ -76,9 +76,9 @@ const Login: React.FC = () => {
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password }),
       });
 
       if (!response.ok) {
@@ -92,9 +92,9 @@ const Login: React.FC = () => {
       setAuth({ isLoggedIn: true, role: data.role });
 
       if (data.role === 'admin') {
-        navigate('/dashboard/admin-dashboard');
+        navigate('/admin/dashboard');
       } else if (data.role === 'user') {
-        navigate('/dashboard/user-dashboard');
+        navigate('/user/dashboard');
       } else {
         throw new Error('Unknown user role');
       }
@@ -121,16 +121,16 @@ const Login: React.FC = () => {
               <TabPanels>
                 <TabPanel>
                   <VStack spacing={4}>
-                    <Input 
-                      placeholder="Username" 
-                      value={username} 
-                      onChange={(e) => setUsername(e.target.value)} 
+                    <Input
+                      placeholder="Username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
-                    <Input 
-                      type="password" 
-                      placeholder="Password" 
-                      value={password} 
-                      onChange={(e) => setPassword(e.target.value)} 
+                    <Input
+                      type="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <Button colorScheme="red" isLoading={loading} onClick={handleSubmit}>
                       {loading ? 'Loading...' : 'Login'}
@@ -140,16 +140,16 @@ const Login: React.FC = () => {
                 </TabPanel>
                 <TabPanel>
                   <VStack spacing={4}>
-                    <Input 
-                      placeholder="Username" 
-                      value={username} 
-                      onChange={(e) => setUsername(e.target.value)} 
+                    <Input
+                      placeholder="Username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
-                    <Input 
-                      type="password" 
-                      placeholder="Password" 
-                      value={password} 
-                      onChange={(e) => setPassword(e.target.value)} 
+                    <Input
+                      type="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <Button colorScheme="red" isLoading={loading} onClick={handleSubmit}>
                       {loading ? 'Loading...' : 'Login'}

@@ -1,23 +1,29 @@
 import React from 'react';
 import {
-  Box, Icon, Link, Text, VStack, Button, Drawer, DrawerOverlay,
-  DrawerContent, DrawerHeader, DrawerBody, useBreakpointValue
+  Box, Icon, Link, Text, VStack, Drawer, DrawerOverlay,
+  DrawerContent, DrawerHeader, DrawerBody, useBreakpointValue, Button
 } from '@chakra-ui/react';
-import { FaHome, FaCalendar, FaChartBar, FaUser, FaBars } from 'react-icons/fa';
+import { FaHome, FaCar, FaCalendar, FaUser, FaBars, FaCogs, FaClipboardList } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 const colors = {
-  primary: '#000000',      // Black
-  background: '#FFFFFF',   // White
-  accent: '#DC143C',       // Crimson Red
+  primary: '#000000', // Black
+  background: '#FFFFFF', // White
+  accent: '#DC143C', // Crimson Red
 };
 
 const menuItems = [
-  { label: 'Dashboard', icon: FaHome, to: '/dashboard/user-dashboard' },
-  { label: 'Events', icon: FaCalendar, to: '/dashboard/user-dashboard/events' },
-  { label: 'Statistics', icon: FaChartBar, to: '/dashboard/user-dashboard/statistics' },
-  { label: 'Profile', icon: FaUser, to: '/dashboard/user-dashboard/profile' },
+  { label: 'Dashboard', icon: FaHome, to: '/user/dashboard' },
+  { label: 'Task Management', icon: FaCalendar, to: '/user/task-management' },
+  { label: 'Vehicle Information', icon: FaCar, to: '/user/vehicle-info' },
+  { label: 'Route Management', icon: FaCalendar, to: '/user/route-management' },
+  { label: 'Fuel Management', icon: FaClipboardList, to: '/user/fuel-management' },
+  { label: 'Maintenance Reporting', icon: FaClipboardList, to: '/user/maintenance-reporting' },
+  { label: 'Communication', icon: FaUser, to: '/user/communication' },
+  { label: 'Profile Management', icon: FaUser, to: '/user/profile-management' },
+  { label: 'Compliance & Documentation', icon: FaClipboardList, to: '/user/compliance-docs' },
+  { label: 'Support', icon: FaCogs, to: '/user/support' },
 ];
 
 const SidebarContainer = styled(Box)<{ isOpen: boolean }>`
@@ -46,18 +52,6 @@ const SidebarItem = styled(Link)`
   }
 `;
 
-const SidebarToggleButton = styled(Button)`
-  background-color: ${colors.primary};
-  color: ${colors.background};
-  width: 100%;
-  text-align: left;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  &:hover {
-    background-color: ${colors.accent};
-  }
-`;
-
 const UserSidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: () => void }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
@@ -65,12 +59,12 @@ const UserSidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar
     <>
       <SidebarContainer isOpen={isOpen}>
         <VStack spacing={4} align="start" mt={5}>
-          <SidebarToggleButton onClick={toggleSidebar}>
+          <SidebarItem as={Button} onClick={toggleSidebar} bg="transparent" _hover={{ bg: colors.accent }}>
             <Icon as={FaBars} mr={isOpen ? 3 : 0} />
             {isOpen && "Menu"}
-          </SidebarToggleButton>
+          </SidebarItem>
           {isOpen && (
-            <Text fontSize="2xl" color={colors.background} pl={5} pb={5}>Opreation Dashboard</Text>
+            <Text fontSize="2xl" color={colors.background} pl={5} pb={5}>Operation Dashboard</Text>
           )}
           {menuItems.map((item, index) => (
             <SidebarItem
